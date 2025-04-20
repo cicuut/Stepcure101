@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recent Threats - Octave Allegro Risk Assessment</title>
+    <script src="https://cdn.plot.ly/plotly-2.14.0.min.js"></script>
+    <style>
+        /* General Styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: #f4f4f9;
+    color: #333;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Main Content */
+.container {
+    max-width: 1200px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2 {
+    color: #2d3e50;
+    margin-bottom: 15px;
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background-color: white;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #2d3e50;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #ddd;
+}
+
+/* Threat Level Highlight */
+td[style*="background-color"] {
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Alerts */
+.alert {
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+}
+
+/* Threat Box */
+.threat-box {
+    background: #ffdddd;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    border-left: 5px solid #ff0000;
+}
+
+/* Back Button */
+a {
+    display: inline-block;
+    margin: 20px 0;
+    text-decoration: none;
+    color: #007bff;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+
+
+    </style>
+</head>
+<body>
+    <body>
+        <h1>Recent Threats (Octave Allegro)</h1>
+    
+        {% if threats %}
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Info</th>
+                        <th>Threat Actor</th>
+                        <th>Threat Scenario</th>
+                        <th>Risk Impact Area</th>
+                        <th>Likelihood</th>
+                        <th>Risk Level</th>
+                        <th>Attributes</th>
+                        <th>Tags</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for threat in threats %}
+                    <tr>
+                        <td>{{ threat.id }}</td>
+                        <td>{{ threat.info }}</td>
+                        <td>{{ threat.threat_actor }}</td>
+                        <td>{{ threat.threat_scenario }}</td>
+                        <td>{{ threat.risk_impact_area }}</td>
+                        <td>{{ threat.likelihood }}</td>
+                        <td style="background-color: 
+                            {% if threat.risk_level == 'Low' %}#90EE90
+                            {% elif threat.risk_level == 'Moderate' %}#FFD700
+                            {% elif threat.risk_level == 'High' %}#FF4500
+                            {% else %}#DC143C{% endif %}; color: white;">
+                            {{ threat.risk_level }}
+                        </td>
+                        <td>
+                            <ul>
+                            {% for attr in threat.attributes[:5] %}
+                                <li>{{ attr.type }}: {{ attr.value }}</li>
+                            {% endfor %}
+                            {% if threat.attributes|length > 5 %}
+                                <li>... and {{ threat.attributes|length - 5 }} more</li>
+                            {% endif %}
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                            {% for tag in threat.tags[:5] %}
+                                <li>{{ tag }}</li>
+                            {% endfor %}
+                            {% if threat.tags|length > 5 %}
+                                <li>... and {{ threat.tags|length - 5 }} more</li>
+                            {% endif %}
+                            </ul>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p style="color:red; font-weight:bold;">No recent threats found.</p>
+        {% endif %}
+    
+
+   
+    <a href="{{ url_for('main.index') }}">Back to Home</a>
+</body>
+</html>

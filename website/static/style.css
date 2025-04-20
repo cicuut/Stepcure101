@@ -1,0 +1,212 @@
+/* General Styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    display: flex;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+/* Sidebar Navigation */
+.sidebar {
+    height: 100vh;
+    width: 250px;
+    background-color: #333;
+    padding-top: 20px;
+    position: fixed;
+    left: 0;
+    overflow-y: auto;
+}
+
+.sidebar h2 {
+    color: white;
+    text-align: center;
+    margin-bottom: 10px;
+}
+.side img {
+    height: 50px;  /* Atur ukuran logo */
+    width: auto;
+}
+
+/* Text styling */
+.side a {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.sidebar a {
+    padding: 12px 20px;
+    text-decoration: none;
+    font-size: 16px;
+    color: white;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidebar a:hover {
+    background-color: #575757;
+}
+
+/* Main Content */
+.container {
+    margin-left: 270px;
+    padding: 20px;
+    width: 100%;
+}
+
+h1, h2 {
+    color: #2d3e50;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+a {
+    display: inline-block;
+    margin: 10px 0;
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Dashboard Sections */
+.dashboard-section {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.dashboard-section iframe {
+    border: none;
+    width: 100%;
+    max-width: 800px;
+    height: 450px;
+}
+
+/* Form & Inputs */
+label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+/* Button Styling */
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 10px;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Steps Navigation */
+.step {
+    display: none;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.step.active {
+    display: block;
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background-color: white;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #2d3e50;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #ddd;
+}
+
+/* Alerts */
+.alert {
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+}
+
+/* Plotly Chart */
+#risk-heatmap {
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+/* Threat Box */
+.threat-box {
+    background: #ffdddd;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    border-left: 5px solid #ff0000;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        margin-left: 0;
+        padding: 10px;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+
+    .sidebar a {
+        display: inline-block;
+        padding: 8px;
+    }
+}

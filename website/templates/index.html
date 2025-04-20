@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Risk Dashboard - OCTAVE Allegro</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .container {
+            display: flex;
+        }
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <a href="{{ url_for('main.index') }}"><img src="static/img/logo.png" alt="Home Page" style="height: 100px; width: auto;"> StepCure 101</a>
+        <a href="#" onclick="showStep(0)">Dashboard</a>
+        <a href="#" onclick="showStep(1)">Step 1: Asset Identification</a>
+        <a href="#" onclick="showStep(2)">Step 2: Environmental Threats</a>
+        <a href="#" onclick="showStep(3)">Step 3: Impact Area</a>
+        <a href="#" onclick="showStep(4)">Step 4: Existing Controls</a>
+        <a href="#" onclick="showStep(5)">Step 5: Risk Evaluation</a>
+        <a href="#" onclick="showStep(6)">Step 6: Impact to Business</a>
+        <a href="#" onclick="showStep(7)">Step 7: Risk Prioritization</a>
+        <a href="#" onclick="showStep(8)">Step 8: Mitigation Strategy</a>
+    </div>
+    
+    <div class="container">
+        <div class="content">
+            <div id="step0" class="step active">
+                <h2>Cyber Risk Dashboard - OCTAVE Allegro</h2>
+                <div class="dashboard-section">
+                  
+                </div>
+                <div class="dashboard-section">
+                    <h3><a href="/recent_threats">Recent Threats</a></h3>
+                </div>
+                <div class="dashboard-section">
+                    <h3>Average Risk Level by Year</h3>
+                    <div id="risk-by-year-chart"></div>
+                </div>
+                <div class="dashboard-section">
+                    <button onclick="createNewAssessment()">Create New Assessment</button>
+                </div>
+                <div class="dashboard-section">
+                    <h3>Assessed Risks</h3>
+                    <table id="risk-table">
+                        <thead>
+                            <tr>
+                                <th>Asset</th>
+                                <th>Threat Actor</th>
+                                <th>Threat Scenario</th>
+                                <th>Risk Impact Area</th>
+                                <th>Impact</th>
+                                <th>Likelihood</th>
+                                <th>Risk Level</th>
+                                <th>Date of Assignment</th>
+                            </tr>
+                        </thead>
+                            <tbody>
+                                {% for risk in risks %}
+                                <tr>
+                                    <td>{{ risk.asset }}</td>
+                                    <td>{{ risk.threat_actor }}</td>
+                                    <td>{{ risk.threat_scenario }}</td>
+                                    <td>{{ risk.risk_impact_area }}</td>
+                                    <td>{{ risk.impact }}</td>
+                                    <td>{{ risk.likelihood }}</td>
+                                    <td style="background-color: 
+                                        {% if risk.risk_level == 'Low' %}#90EE90
+                                        {% elif risk.risk_level == 'Moderate' %}#FFD700
+                                        {% elif risk.risk_level == 'High' %}#FF4500
+                                        {% else %}#DC143C{% endif %}; color: white;">
+                                        {{ risk.risk_level }}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            
+                     
+                    </table>
+                </div>
+            </div>
+            <div id="step1" class="step">
+                <h2>Step 1: Asset Identification</h2>
+
+                <label for="date_assignment">Date of Assessment:</label>
+                <input type="date" id="date_assignment" required>
+                
+                <label for="asset">Information Asset:</label>
+                <input type="text" id="asset" placeholder="Input Asset Information...">
+                
+                <label for="critical_asset">What is the critical information asset?</label>
+                <input type="text" id="critical_asset" placeholder="Input The Critical Asset Information...">
+                
+                <label for="importance">Why is this information asset important to the organization?</label>
+                <input type="text" id="importance" placeholder="Input The Importance of the Asset...">
+                
+                <label for="asset_location">Where is the asset located (e.g., physical location, digital storage)?</label>
+                <input type="text" id="asset_location" placeholder="Input Location...">
+                
+                <label for="asset_value">What is the value of the asset to the organization (e.g., monetary, strategic)?</label>
+                <input type="text" id="asset_value" placeholder="Input Asset Value...">
+                
+                <button onclick="submitStep(1)">Submit Step 1</button>
+            </div>
+            
+            <div id="step2" class="step">
+                <h2>Step 2: Environmental Threats</h2>
+                <label for="threat_actor">Threat Actor:</label>
+                <select id="threat_actor">
+                    <option value="Insider Threat">Insider Threat</option>
+                    <option value="Cyber Criminal">Cyber Criminal</option>
+                    <option value="Nation-State">Nation-State</option>
+                    <option value="Hacktivist">Hacktivist</option>
+                    <option value="Natural Disaster">Natural Disaster</option>
+                </select>
+                
+                <label for="threat_intent">What is the intent of the threat actor (e.g., financial gain, political motives, sabotage)?</label>
+                <input type="text" id="threat_intent" placeholder="Input Threat Actor's Intent...">
+                
+                <label for="external_threat">Are there any external factors contributing to the threat (e.g., geopolitical issues, technological changes)?</label>
+                <input type="text" id="external_threat" placeholder="Input External Threat Factors...">
+                
+                <button onclick="submitStep(2)">Submit Step 2</button>
+            </div>
+            
+            <div id="step3" class="step">
+                <h2>Step 3: Impact Area</h2>
+                <label for="risk_impact_area">Risk Impact Area:</label>
+                <select id="risk_impact_area">
+                    <option value="Financial Loss">Financial Loss</option>
+                    <option value="Operational Disruption">Operational Disruption</option>
+                    <option value="Reputation Damage">Reputation Damage</option>
+                    <option value="Legal or Compliance Risks">Legal or Compliance Risks</option>
+                    <option value="Intellectual Property Theft">Intellectual Property Theft</option>
+                </select>
+            
+                <label for="impact_description">Describe the potential impact of this risk in your organization.</label>
+                <textarea id="impact_description" placeholder="Input the impact description..."></textarea>
+                
+                <button onclick="submitStep(3)">Submit Step 3</button>
+            </div>
+            
+            <div id="step4" class="step">
+                <h2>Step 4: Existing Controls</h2>
+                <label for="security_controls">Security Control:</label>
+                <textarea id="security_controls" placeholder="Enter existing controls..."></textarea>
+                
+                <label for="control_effectiveness">How effective are these controls in reducing risk?</label>
+                <textarea id="control_effectiveness" placeholder="Describe control effectiveness..."></textarea>
+                
+                <label for="control_gaps">Are there any gaps or weaknesses in the existing controls?</label>
+                <textarea id="control_gaps" placeholder="Describe control gaps..."></textarea>
+                
+                <button onclick="submitStep(4)">Submit Step 4</button>
+            </div>
+            
+            <div id="step5" class="step">
+                <h2>Step 5: Risk Evaluation</h2>
+                <label for="impact">Impact (1-3):</label>
+                <select id="impact">
+                    <option value="1">Low</option>
+                    <option value="2">Moderate</option>
+                    <option value="3">High</option>
+                </select>
+                
+                <label for="likelihood">Likelihood (1-3):</label>
+                <select id="likelihood">
+                    <option value="1">Low</option>
+                    <option value="2">Moderate</option>
+                    <option value="3">High</option>
+                </select>
+                
+                <label for="risk_description">Provide any additional context or considerations for this risk evaluation.</label>
+                <textarea id="risk_description" placeholder="Describe risk evaluation details..."></textarea>
+                
+                <button onclick="submitStep(5)">Submit Step 5</button>
+            </div>
+            
+            <div id="step6" class="step">
+                <h2>Step 6: Impact to Business</h2>
+                <label for="business_impact">Describe how the risk could impact business operations, revenue, and reputation.</label>
+                <textarea id="business_impact" placeholder="Describe the impact on business..."></textarea>
+                
+                <label for="financial_impact">What is the potential financial impact of this risk?</label>
+                <input type="text" id="financial_impact" placeholder="Input potential financial impact...">
+                
+                <button onclick="submitStep(6)">Submit Step 6</button>
+            </div>
+            
+            <div id="step7" class="step">
+                <h2>Step 7: Risk Prioritization</h2>
+                <label for="risk_priority">Describe the prioritization of this risk relative to other risks.</label>
+                <textarea id="risk_priority" placeholder="Describe risk mitigation prioritization..."></textarea>
+                
+                <label for="risk_mitigation">What steps or actions are required to mitigate this risk?</label>
+                <textarea id="risk_mitigation" placeholder="Describe risk mitigation steps..."></textarea>
+                
+                <button onclick="submitStep(7)">Submit Step 7</button>
+            </div>
+            
+            <div id="step8" class="step">
+                <h2>Step 8: Mitigation Strategy</h2>
+                <label for="mitigation_strategy">Describe the strategy to mitigate the risk (e.g., avoidance, reduction, transfer, acceptance).</label>
+                <textarea id="mitigation_strategy" placeholder="Describe the mitigation strategy..."></textarea>
+                
+                <label for="resource_needs">What resources are required to implement this strategy?</label>
+                <textarea id="resource_needs" placeholder="Describe the resources needed..."></textarea>
+                
+                <button onclick="calculateAndAddRisk()">Calculate Risk</button>
+                <div id="result"></div>
+
+                <div id="risk-buttons" style="display:none;">
+                
+                    <button onclick="downloadPDF()">Download</button>
+                </div>   
+            </div>
+    </div>
+</div>
+
+<script>
+     let currentAssessmentId = null;  // Store latest assessment ID
+
+function createNewAssessment() {
+    fetch('/create_assessment', { method: 'POST' })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message);
+        currentAssessmentId = data.assessment_id;  // Store new ID
+        fetchAssessmentProgress();
+    })
+    .catch(error => console.error("Error creating assessment:", error));
+}
+function fetchRisks() {
+    fetch('/fetch_risks')
+        .then(response => response.json())
+        .then(data => {
+            let tableBody = document.querySelector("#risk-table tbody");
+            tableBody.innerHTML = "";  // Clear old data
+
+            data.forEach(risk => {
+                let row = `
+                    <tr>
+                        <td>${risk.asset || 'N/A'}</td>
+                        <td>${risk.threat_actor || 'N/A'}</td>
+                        <td>${risk.threat_scenario || 'N/A'}</td>
+                        <td>${risk.risk_impact_area || 'N/A'}</td>
+                        <td>${risk.impact !== undefined ? risk.impact : 'N/A'}</td>
+                        <td>${risk.likelihood || 'N/A'}</td>
+                        <td style="background-color: ${risk.risk_level === 'Low' ? '#90EE90' :
+                            risk.risk_level === 'Moderate' ? '#FFD700' :
+                            risk.risk_level === 'High' ? '#FF4500' : '#DC143C'}; color: white;">
+                            ${risk.risk_level || 'N/A'}
+                        </td>
+                        <td>${risk.date_assignment || 'N/A'}</td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+        })
+        .catch(error => console.error("Error loading risks:", error));
+}
+
+        document.addEventListener("DOMContentLoaded", fetchRisks);
+
+function submitStep(step) {
+    if (!currentAssessmentId) {
+        alert("Please create an assessment first.");
+        return;
+    }
+
+    let formData = {};
+
+    switch (step) {
+        case 1:  // Step 1: Asset Identification
+            formData = {
+                asset: document.getElementById("asset").value,
+                critical_asset: document.getElementById("critical_asset").value,
+                importance: document.getElementById("importance").value,
+                asset_location: document.getElementById("asset_location").value,
+                asset_value: document.getElementById("asset_value").value
+            };
+            break;
+
+        case 2:  // Step 2: Environmental Threats
+            formData = {
+                threat_actor: document.getElementById("threat_actor").value,
+                threat_intent: document.getElementById("threat_intent").value,
+                external_threat: document.getElementById("external_threat").value
+            };
+            break;
+
+        case 3:  // Step 3: Impact Area
+            formData = {
+                risk_impact_area: document.getElementById("risk_impact_area").value,
+                impact_description: document.getElementById("impact_description").value
+            };
+            break;
+
+        case 4:  // Step 4: Existing Controls
+            formData = {
+                security_controls: document.getElementById("security_controls").value,
+                control_effectiveness: document.getElementById("control_effectiveness").value,
+                control_gaps: document.getElementById("control_gaps").value
+            };
+            break;
+
+        case 5:  // Step 5: Risk Evaluation
+            formData = {
+                impact: document.getElementById("impact").value,
+                likelihood: document.getElementById("likelihood").value,
+                risk_description: document.getElementById("risk_description").value
+            };
+            break;
+
+        case 6:  // Step 6: Impact to Business
+            formData = {
+                business_impact: document.getElementById("business_impact").value,
+                financial_impact: document.getElementById("financial_impact").value
+            };
+            break;
+
+        case 7:  // Step 7: Risk Prioritization
+            formData = {
+                risk_priority: document.getElementById("risk_priority").value,
+                risk_mitigation: document.getElementById("risk_mitigation").value
+            };
+            break;
+
+        case 8:  // Step 8: Mitigation Strategy
+            formData = {
+                mitigation_strategy: document.getElementById("mitigation_strategy").value,
+                resource_needs: document.getElementById("resource_needs").value
+            };
+            break;
+
+        default:
+            alert("Invalid step.");
+            return;
+    }
+
+    // Send the form data to the backend
+    fetch('/submit_step', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ assessment_id: currentAssessmentId, step: step, status: "complete", data: formData })
+    })
+    .then(response => {
+        if (!response.ok) {  // If the response is not OK (status code is not 200)
+            return response.json().then(data => {
+                alert("Error: " + data.error);  // Show error alert with the error message
+                throw new Error(data.error);  // Stop further execution
+            });
+        }
+        return response.json();  // If response is OK, process the response as success
+    })
+    .then(data => {
+        alert("Success: " + data.message);  // Show success message
+        fetchAssessmentProgress();  // Refresh progress after submission
+    })
+    .catch(error => {
+        console.error("Error submitting step:", error);
+    });
+}
+function renderRiskLevelChart() {
+    fetch('/graphic_risks')  // Fetch the risk data from the backend
+        .then(response => response.json())
+        .then(figure => {
+            if (figure.data && figure.layout) {
+                Plotly.newPlot('risk-by-year-chart', figure.data, figure.layout);  // Render the chart
+            } else {
+                console.error('Invalid data or layout returned from server');
+            }
+        })
+        .catch(error => console.error('Error loading risk data:', error));
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    renderRiskLevelChart();  // Render the chart when the page is ready
+});
+
+
+
+
+    function showStep(step) {
+        let steps = document.querySelectorAll('.step');
+        steps.forEach(s => s.classList.remove('active'));
+        document.getElementById('step' + step).classList.add('active');
+    }
+   
+    function calculateAndAddRisk() {
+    let asset = document.getElementById("asset").value;
+    let date_assignment = document.getElementById("date_assignment").value;
+    let critical_asset = document.getElementById("critical_asset").value;
+    let importance = document.getElementById("importance").value;
+    let asset_location = document.getElementById("asset_location").value;
+    let asset_value = document.getElementById("asset_value").value;
+
+    let threat_actor = document.getElementById("threat_actor").value;
+    let threat_intent = document.getElementById("threat_intent").value;
+    let external_threat = document.getElementById("external_threat").value;
+
+    let threat_scenario = `Potential ${threat_intent} by ${threat_actor}`;
+
+    let risk_impact_area = document.getElementById("risk_impact_area").value;
+    let impact_description = document.getElementById("impact_description").value;
+
+    let security_controls = document.getElementById("security_controls").value;
+    let control_effectiveness = document.getElementById("control_effectiveness").value;
+    let control_gaps = document.getElementById("control_gaps").value;
+
+    let impact = document.getElementById("impact").value;
+    let likelihood = document.getElementById("likelihood").value;
+    let risk_description = document.getElementById("risk_description").value;
+
+    let business_impact = document.getElementById("business_impact").value;
+    let financial_impact = document.getElementById("financial_impact").value;
+
+    let risk_priority = document.getElementById("risk_priority").value;
+    let risk_mitigation = document.getElementById("risk_mitigation").value;
+
+    let mitigation_strategy = document.getElementById("mitigation_strategy").value;
+    let resource_needs = document.getElementById("resource_needs").value;
+
+    // Calculate risk level
+    let riskMatrix = {
+        '1-1': 'Low', '1-2': 'Low', '1-3': 'Moderate',
+        '2-1': 'Low', '2-2': 'Moderate', '2-3': 'High',
+        '3-1': 'Moderate', '3-2': 'High', '3-3': 'Critical'
+    };
+
+    let riskKey = `${impact}-${likelihood}`;
+    let risk_level = riskMatrix[riskKey] || 'Unknown';
+
+    document.getElementById("result").innerHTML = `<h3>Risk Assessment: ${risk_level}</h3>`;
+
+    // Submit the risk data
+    fetch('/add_risk', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            asset: asset,
+            date_assignment: date_assignment,
+            critical_asset: critical_asset,
+            importance: importance,
+            asset_location: asset_location,
+            asset_value: asset_value,
+            threat_actor: threat_actor,
+            threat_intent: threat_intent,
+            external_threat: external_threat,
+            threat_scenario: threat_scenario,
+            risk_impact_area: risk_impact_area,
+            impact_description: impact_description,
+            security_controls: security_controls,
+            control_effectiveness: control_effectiveness,
+            control_gaps: control_gaps,
+            impact: impact,
+            likelihood: likelihood,
+            risk_description: risk_description,
+            business_impact: business_impact,
+            financial_impact: financial_impact,
+            risk_priority: risk_priority,
+            risk_mitigation: risk_mitigation,
+            mitigation_strategy: mitigation_strategy,
+            resource_needs: resource_needs,
+            risk_level: risk_level
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Risk added:", data);
+        alert("Risk successfully added!");
+        fetchRisks();  // Refresh the risk table after adding the data
+        renderRiskByYearChart();  // Update the risk chart
+    })
+    .catch(error => console.error("Error adding risk:", error));
+}
+
+
+
+    function renderRiskByYearChart() {
+    fetch('/visualize_risks')
+        .then(response => response.json())
+        .then(figure => {
+            Plotly.newPlot('risk-by-year-chart', figure.data, figure.layout);
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+    document.addEventListener("DOMContentLoaded", function() {
+        fetchRisks();
+        fetchAssessmentProgress();
+        renderRiskByYearChart();
+    });
+
+    // ✅ Munculkan tombol Edit & Download setelah perhitungan risiko selesai
+    document.getElementById("risk-buttons").style.display = "block";
+
+    function downloadPDF() {
+    fetch('/fetch_risks')
+        .then(response => response.json())
+        .then(data => {
+            if (data.length === 0) {
+                alert("No risk data available!");
+                return;
+            }
+
+            let latestRiskId = data[data.length - 1]._id.$oid; // Ambil ID terbaru
+            console.log("Downloading PDF for Risk ID:", latestRiskId);
+            window.location.href = `/download_pdf/${latestRiskId}`;
+        })
+        .catch(error => console.error("Error fetching risks:", error));
+}
+</script>
+
+
+</body>
+</html>
+

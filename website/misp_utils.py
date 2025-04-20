@@ -4,7 +4,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 from pymisp import PyMISP
 from flask import current_app
 
-MISP_URL = "https://192.168.56.101"
+MISP_URL = "LOCALHOST"
 MISP_KEY = "API_KEY"
 VERIFY_CERT = False
 
